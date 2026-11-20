@@ -30,7 +30,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/events');
+            return redirect()->intended(route('events.index'));
         }
 
         return back()->withErrors([
@@ -55,12 +55,14 @@ class AuthController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role'     => ['nullable', 'string', 'in:Admin,Staff'],
         ]);
 
         $user = User::create([
             'name'     => $validated['name'],
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role'     => $validated['role'] ?? 'Staff',
         ]);
 
         Auth::login($user);
@@ -69,7 +71,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Proses kelur/logout user.
+     * Proses keluar/logout user.
      */
     public function logout(Request $request)
     {
@@ -78,6 +80,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
     }
 }

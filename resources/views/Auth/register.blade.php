@@ -1,39 +1,61 @@
-@extends('layouts.index')
+@extends('layouts.app')
 
-@section('title', 'Registrasi')
+@section('title', 'Register')
 
 @section('content')
-    <h2>Halaman Pendaftaran</h2>
+    <h2>Pendaftaran Akun Baru</h2>
 
     <form action="{{ route('register') }}" method="POST">
         @csrf
 
-        <p>
+        <div>
             <label for="name">Nama Lengkap:</label><br>
             <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
-            @error('name') <br><small style="color:red;">{{ $message }}</small> @enderror
-        </p>
+            @error('name')
+                <br><small>{{ $message }}</small>
+            @enderror
+        </div>
+        <br>
 
-        <p>
-            <label for="email">Email:</label><br>
+        <div>
+            <label for="email">Alamat Email:</label><br>
             <input type="email" id="email" name="email" value="{{ old('email') }}" required>
-            @error('email') <br><small style="color:red;">{{ $message }}</small> @enderror
-        </p>
+            @error('email')
+                <br><small>{{ $message }}</small>
+            @enderror
+        </div>
+        <br>
 
-        <p>
+        <div>
+            <label for="role">Peran (Role):</label><br>
+            <select id="role" name="role">
+                <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
+                <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+            </select>
+            @error('role')
+                <br><small>{{ $message }}</small>
+            @enderror
+        </div>
+        <br>
+
+        <div>
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password" required>
-            @error('password') <br><small style="color:red;">{{ $message }}</small> @enderror
-        </p>
+            @error('password')
+                <br><small>{{ $message }}</small>
+            @enderror
+        </div>
+        <br>
 
-        <p>
+        <div>
             <label for="password_confirmation">Konfirmasi Password:</label><br>
             <input type="password" id="password_confirmation" name="password_confirmation" required>
-        </p>
+        </div>
+        <br>
 
-        <p>
+        <div>
             <button type="submit">Daftar</button>
-        </p>
+        </div>
     </form>
 
     <p>Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a></p>
